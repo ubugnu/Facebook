@@ -90,21 +90,23 @@ function scrape_fb {
 	if [ "${RES}" = "-1" ]; then
 		echo "PORT ${NEW_PORT}: Captcha found! finding a new clean pathway..."
 		newnym NEW_PORT
-		(sleep 20 && echo "PORT ${NEW_PORT}: ${NUM} => (retrying)..." && scrape_fb ${NUM}) &
+		(sleep 60 && scrape_fb ${NUM}) &
 	else
 		if [ -z "${RES}" ]; then
 			RES="unknown"
 		elif [ "+${RES}" = "${NUM}" ] || [ "${RES}" = "${NUM}" ]; then
 			STR=" (I'll retry later...)"
-			(sleep 20 && echo "PORT ${NEW_PORT}: ${NUM} => (retrying)..." && scrape_fb ${NUM}) &
+			(sleep 60 && scrape_fb ${NUM}) &
 		else
 			FOUND+=("${NUM}:${RES}")
+			echo ${FOUND}
 		fi
 		echo "PORT ${NEW_PORT}: ${NUM} => ${RES}${STR}"
 	fi
 }
 
 function control_c {
+	FOUND="$@"
 	echo -e "\n*** Well... Exiting! ***\n"
 	echo "Do you want to kill all tor instances (y/N)"
 	read KILLTOR
@@ -114,7 +116,10 @@ function control_c {
 	if [ "${KILLTOR,,}" = "y" ]; then
 		killall tor
 	fi 
-	echo ${FOUND} 2>&1 | curl -F 'f:1=<-' ix.io
+	echo "Results:"
+	printf -- '%s\n' "${FOUND[@]}"
+	echo "You can find results in the link that will appear below..."
+	printf -- '%s\n' "${FOUND[@]}" | curl -F 'sprunge=<-' http://sprunge.us
 	exit $?
 	}
 
@@ -124,7 +129,7 @@ fi
 
 switch_proxy > /dev/null 2>&1
 
-trap control_c SIGINT
+trap "control_c ${FOUND}" SIGINT
 
 while :
 do
