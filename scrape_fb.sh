@@ -12,7 +12,7 @@ read UP
 if [ -z "${UP}" ]; then
 	UP="n"
 fi
-echo "Now, write your are code (e.g +213)"
+echo "Now, write your area code (e.g +213)"
 read CODE
 echo "How many digits is there after this area code?"
 read N
