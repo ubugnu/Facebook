@@ -2,9 +2,9 @@
 
 echo "Hi, I'm the script that will scrape facebook name from random phone numbers for you, press any button to continue"
 read
-echo "Please give me a range of ports that I will use, from port..."
+echo "Please give me a range of ports that I will use, from port (below 9999)..."
 read BEGIN
-echo "... to port ..."
+echo "... to port (below 9999) ..."
 read END
 RANGE=$(seq ${BEGIN} ${END})
 echo "Are these tor ports already working? (y/N)"
