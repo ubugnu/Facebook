@@ -99,9 +99,8 @@ function scrape_fb {
 			(sleep 60 && scrape_fb ${NUM}) &
 		else
 			FOUND+=("${NUM}:${RES}")
-			echo ${FOUND}
 		fi
-		echo "PORT ${NEW_PORT}: ${NUM} => ${RES}${STR}"
+		echo -e "\e[31m\e[1mPORT ${NEW_PORT}: ${NUM} => ${RES}${STR}\e[0m"
 	fi
 }
 
