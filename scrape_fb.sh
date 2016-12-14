@@ -45,18 +45,18 @@ function random {
 
 function twget {
 	URL="$@"
-	torsocks wget -T 10 -qO- ${URL} 2> /dev/null
+	torsocks wget --user-agent="Mozilla/5.0 (Windows NT 5.2; rv:2.0.1) Gecko/20100101 Firefox/4.0.1" -T 10 -4qO- ${URL} 2> /dev/null
 }
 
 function tget_name {
 	NUM="$@"
-	RES=$(twget --user-agent="Mozilla/5.0 (Windows NT 5.2; rv:2.0.1) Gecko/20100101 Firefox/4.0.1" --post-data="email=${NUM}" "https://m.facebook.com/login/identify?ctx=recover")
+	RES=$(twget --post-data="email=${NUM}" "https://m.facebook.com/login/identify?ctx=recover")
 	if [[ $RES =~ captcha ]] 
 	then 
 		echo -1
 		return
 	fi
-	echo ${RES} | tee -a .fb_log | grep -oP '<div\sclass="mfsl\sfcb">(.*?)<\/div>' | sed -e :a -e 's/<[^>]*>//g;/</N;//ba'
+	echo ${RES} | tee -a .fb_log | grep -oP '<div\sclass="w\sx">(.*?)<\/div>' | sed -e :a -e 's/<[^>]*>//g;/</N;//ba'
 }
 
 function multitor {
